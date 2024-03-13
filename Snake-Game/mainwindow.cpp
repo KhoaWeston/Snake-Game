@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+//This comment is only to test git in qt
+//I really hope it works...
 //Fonts setup
     QFontDatabase::addApplicationFont(":/fonts/PressStart2P-vaV7.ttf");
     QFont PressStart2P_9 = QFont("Press Start 2P", 9, 0);
