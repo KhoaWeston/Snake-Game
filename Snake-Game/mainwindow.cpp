@@ -3,8 +3,7 @@
 #include <QLabel>
 #include <QBoxLayout>
 #include <QFontDatabase>
-
-int difficulty = 0; //0 = unpicked, 1 = slug, 2 = worm, 3 = python
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,20 +19,23 @@ MainWindow::MainWindow(QWidget *parent)
     QFont PressStart2P_40 = QFont("Press Start 2P", 40, 0);
 
     QWidget *start_up_w = new QWidget;
-    QHBoxLayout *H0Layout = new QHBoxLayout();
-    QHBoxLayout *H1Layout = new QHBoxLayout();
-    QHBoxLayout *H2Layout = new QHBoxLayout();
-    QHBoxLayout *H3Layout = new QHBoxLayout();
-    QHBoxLayout *H4Layout = new QHBoxLayout();
-    QHBoxLayout *H5Layout = new QHBoxLayout();
+    QHBoxLayout *H7Layout = new QHBoxLayout();
     QHBoxLayout *H6Layout = new QHBoxLayout();
+    QHBoxLayout *H5Layout = new QHBoxLayout();
+    QHBoxLayout *H4Layout = new QHBoxLayout();
+    QHBoxLayout *H3Layout = new QHBoxLayout();
+    QHBoxLayout *H2Layout = new QHBoxLayout();
+    QHBoxLayout *H1Layout = new QHBoxLayout();
+    QHBoxLayout *H0Layout = new QHBoxLayout();
+    QHBoxLayout *H8Layout = new QHBoxLayout();
+    QHBoxLayout *H9Layout = new QHBoxLayout();
     QVBoxLayout *VLayout = new QVBoxLayout();
 
     int size_button_diff_H = 164, size_button_diff_V = 40;
-    int size_button_sg_H = 320, size_button_sg_V = 60;
+    int size_button_sg_H = 320, size_button_sg_V = 50;
     int size_label_Hline_H = 450;
     int size_label_pic_H = 512, size_label_pic_V = 512;
-    int size_mainWindow_H = 532, size_mainWindow_V = 832;
+    int size_mainWindow_H = 532, size_mainWindow_V = 922;
 
 //Snake big name label
     bigName_label = new QLabel("~SNAKE~", this);
@@ -68,7 +70,8 @@ MainWindow::MainWindow(QWidget *parent)
     difficulty_worm = new QPushButton("Worm", this);
     connect(difficulty_worm, &QPushButton::released, this, &MainWindow::on_difficulty_worm_clicked);
     difficulty_worm->setFixedSize(size_button_diff_H, size_button_diff_V);
-    difficulty_worm->setStyleSheet("QPushButton { background-color: rgb(100, 100, 100); }");
+    difficulty_worm->setStyleSheet("background-color: rgb(100, 100, 100);"
+                                   "border:6px solid rgb(50, 50, 50);");
     difficulty_worm->setFont(PressStart2P_15);
 
     difficulty_python = new QPushButton("Python", this);
@@ -77,10 +80,34 @@ MainWindow::MainWindow(QWidget *parent)
     difficulty_python->setStyleSheet("QPushButton { background-color: rgb(100, 100, 100); }");
     difficulty_python->setFont(PressStart2P_15);
 
-//Horizontal line label
+//Horizontal line label 1
     h_label_1 = new QLabel(this);
     h_label_1->setFrameShape(QFrame::HLine);
-    h_label_1->setMaximumWidth(size_label_Hline_H);
+    h_label_1->setFixedWidth(size_label_Hline_H);
+
+//Number of Players
+    player_amount_label = new QLabel("Number of Players", this);
+    player_amount_label->setFont(PressStart2P_15);
+
+//One Player Button
+    one_player = new QPushButton("One", this);
+    connect(one_player, &QPushButton::released, this, &MainWindow::on_one_player_clicked);
+    one_player->setFont(PressStart2P_15);
+    one_player->setStyleSheet("background-color: rgb(100, 100, 100);"
+                              "border:6px solid rgb(50, 50, 50);");
+    one_player->setFixedSize(size_button_diff_H, size_button_diff_V);
+
+//Two Player Button
+    two_player = new QPushButton("Two", this);
+    connect(two_player, &QPushButton::released, this, &MainWindow::on_two_player_clicked);
+    two_player->setStyleSheet("QPushButton { background-color: rgb(100, 100, 100); }");
+    two_player->setFont(PressStart2P_15);
+    two_player->setFixedSize(size_button_diff_H, size_button_diff_V);
+
+//Horizontal line label 11
+    h_label_11 = new QLabel(this);
+    h_label_11->setFrameShape(QFrame::HLine);
+    h_label_11->setFixedWidth(size_label_Hline_H);
 
 //Start Game Button
     start_game = new QPushButton("Start Game!", this);
@@ -89,53 +116,73 @@ MainWindow::MainWindow(QWidget *parent)
     start_game->setStyleSheet("QPushButton { background-color: rgb(100, 100, 100); }");
     start_game->setFont(PressStart2P_20);
 
+
 ///////////////////////////////////////////////////////////////////////////////////////
 
+    H9Layout->addStretch();
+    H9Layout->addWidget(bigName_label); //Big name label
+    H9Layout->addStretch();
+
+    H8Layout->addStretch();
+    H8Layout->addWidget(pic_label); //image
+    H8Layout->addStretch();
+
+    H7Layout->addStretch();
+    H7Layout->addWidget(info_label); //Instructions on how to play
+    H7Layout->addStretch();
+
     H6Layout->addStretch();
-    H6Layout->addWidget(bigName_label); //Big name label
+    H6Layout->addWidget(h_label_2); //"Select a Difficulty"
     H6Layout->addStretch();
 
     H5Layout->addStretch();
-    H5Layout->addWidget(pic_label); //image
+    H5Layout->addWidget(difficulty_slug);
+    H5Layout->addSpacing(10);
+    H5Layout->addWidget(difficulty_worm); //Difficulties
+    H5Layout->addSpacing(10);
+    H5Layout->addWidget(difficulty_python);
     H5Layout->addStretch();
+    H5Layout->setSpacing(0);
 
     H4Layout->addStretch();
-    H4Layout->addWidget(info_label); //Instructions on how to play
+    H4Layout->addWidget(h_label_1); //Horizontal Line
     H4Layout->addStretch();
 
     H3Layout->addStretch();
-    H3Layout->addWidget(h_label_2); //"Select a Difficulty"
+    H3Layout->addWidget(player_amount_label); //Player Amount Label
     H3Layout->addStretch();
 
     H2Layout->addStretch();
-    H2Layout->addWidget(difficulty_slug);
-    H2Layout->addSpacing(10);
-    H2Layout->addWidget(difficulty_worm); //Difficulties
-    H2Layout->addSpacing(10);
-    H2Layout->addWidget(difficulty_python);
+    H2Layout->addWidget(one_player); //Player Amount Buttons
+    H2Layout->addWidget(two_player);
     H2Layout->addStretch();
-    H2Layout->setSpacing(0);
 
-    H1Layout->insertSpacing(0, 5);
-    H1Layout->addWidget(h_label_1); //Horizontal Line
-    H1Layout->insertSpacing(2, 5);
+    H1Layout->addStretch();
+    H1Layout->addWidget(h_label_11); //Horizontal Line
+    H1Layout->addStretch();
 
-    H0Layout->insertStretch(0);
+    H0Layout->addStretch();
     H0Layout->addWidget(start_game); //Start Game
-    H0Layout->insertStretch(2);
+    H0Layout->addStretch();
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
     VLayout->addStretch();
     VLayout->addSpacing(2);
-    VLayout->addLayout(H6Layout); //Snake big name
-    VLayout->addLayout(H5Layout); //image
-    VLayout->addSpacing(20);
-    VLayout->addLayout(H4Layout); //Instructions on how to play
+    VLayout->addLayout(H9Layout); //Snake big name
+    VLayout->addLayout(H8Layout); //image
     VLayout->addSpacing(5);
-    VLayout->addLayout(H3Layout); //"Select Difficulty"
-    VLayout->addSpacing(10);
-    VLayout->addLayout(H2Layout); // Difficulties
+    VLayout->addLayout(H7Layout); //Instructions on how to play
+    VLayout->addSpacing(5);
+    VLayout->addLayout(H6Layout); //"Select Difficulty"
+    VLayout->addSpacing(2);
+    VLayout->addLayout(H5Layout); // Difficulties
+    VLayout->addSpacing(0);
+    VLayout->addLayout(H4Layout); //Horizontal Line
+    VLayout->addSpacing(0);
+    VLayout->addLayout(H3Layout); //Player Amount Label
+    VLayout->addSpacing(0);
+    VLayout->addLayout(H2Layout); //Player Amount Buttons
     VLayout->addSpacing(0);
     VLayout->addLayout(H1Layout); //Horizontal Line
     VLayout->addSpacing(0);
@@ -147,8 +194,9 @@ MainWindow::MainWindow(QWidget *parent)
     start_up_w->setLayout(VLayout);
     start_up_w->setStyleSheet("background-color: rgb(118,178,78);");
     start_up_w->show();
-    setCentralWidget(start_up_w);
+    //setCentralWidget(start_up_w);
     QMainWindow::setFixedSize(size_mainWindow_H, size_mainWindow_V); //Fixes size of main window
+
 }
 
 MainWindow::~MainWindow()
@@ -158,29 +206,50 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_difficulty_slug_clicked()
 {
-    difficulty = 1;
+//    t_interval = VALUE;
     difficulty_slug->setStyleSheet("background-color: rgb(100, 100, 100);"
                                    "border:6px solid rgb(50, 50, 50);");
     difficulty_worm->setStyleSheet("background-color: rgb(100, 100, 100);");
     difficulty_python->setStyleSheet("background-color: rgb(100, 100, 100);");
+    qInfo() << "slug";
 }
 
 void MainWindow::on_difficulty_worm_clicked()
 {
-    difficulty = 2;
+//    t_interval = VALUE;
     difficulty_worm->setStyleSheet("background-color: rgb(100, 100, 100);"
                                    "border:6px solid rgb(50, 50, 50);");
     difficulty_slug->setStyleSheet("background-color: rgb(100, 100, 100);");
     difficulty_python->setStyleSheet("background-color: rgb(100, 100, 100);");
+    qInfo() << "worm";
 }
 
 void MainWindow::on_difficulty_python_clicked()
 {
-    difficulty = 3;
+//    t_interval = VALUE;
     difficulty_python->setStyleSheet("background-color: rgb(100, 100, 100);"
                                    "border:6px solid rgb(50, 50, 50);");
     difficulty_slug->setStyleSheet("background-color: rgb(100, 100, 100);");
     difficulty_worm->setStyleSheet("background-color: rgb(100, 100, 100);");
+    qInfo() << "python";
+}
+
+void MainWindow::on_one_player_clicked()
+{
+//    two_player = FALSE;
+    one_player->setStyleSheet("background-color: rgb(100, 100, 100);"
+                              "border:6px solid rgb(50, 50, 50);");
+    two_player->setStyleSheet("background-color: rgb(100, 100, 100);");
+    qInfo() << "one player";
+}
+
+void MainWindow::on_two_player_clicked()
+{
+//    two_player = TRUE;
+    two_player->setStyleSheet("background-color: rgb(100, 100, 100);"
+                              "border:6px solid rgb(50, 50, 50);");
+    one_player->setStyleSheet("background-color: rgb(100, 100, 100);");
+    qInfo() << "two player";
 }
 
 void MainWindow::on_start_game_clicked()
@@ -188,4 +257,3 @@ void MainWindow::on_start_game_clicked()
     QMainWindow::close();
     //start_up_w->hide();
 }
-
