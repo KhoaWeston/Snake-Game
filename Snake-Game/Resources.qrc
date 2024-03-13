@@ -3,7 +3,6 @@
         <file>PressStart2P-vaV7.ttf</file>
     </qresource>
     <qresource prefix="/images">
-        <file>3.png</file>
         <file>2.png</file>
     </qresource>
 </RCC>
