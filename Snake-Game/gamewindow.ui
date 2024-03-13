@@ -6,24 +6,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>800</width>
+    <height>575</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLCDNumber" name="lcdNumber">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>150</y>
-     <width>49</width>
-     <height>16</height>
+     <x>140</x>
+     <y>40</y>
+     <width>64</width>
+     <height>23</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Game</string>
+  </widget>
+  <widget class="QLCDNumber" name="lcdNumber_2">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>40</y>
+     <width>64</width>
+     <height>23</height>
+    </rect>
    </property>
   </widget>
  </widget>

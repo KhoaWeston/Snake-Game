@@ -4,6 +4,7 @@
 #include <QBoxLayout>
 #include <QFontDatabase>
 #include <QDebug>
+#include <gamewindow.h>
 
 StartupWindow::StartupWindow(QWidget *parent) :
     QDialog(parent),
