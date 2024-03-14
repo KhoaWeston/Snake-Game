@@ -188,6 +188,7 @@ Makefile: ../Snake-Game/Snake-Game.pro ../../../../QtProgramFiles/6.4.0/mingw_64
 		../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/qt_config.prf \
 		../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/win32-g++/qmake.conf \
 		../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/exclusive_builds.prf \
 		../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/toolchain.prf \
 		../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/default_pre.prf \
@@ -217,8 +218,8 @@ Makefile: ../Snake-Game/Snake-Game.pro ../../../../QtProgramFiles/6.4.0/mingw_64
 		../../../../QtProgramFiles/6.4.0/mingw_64/lib/Qt6Gui.prl \
 		../../../../QtProgramFiles/6.4.0/mingw_64/lib/Qt6Core.prl \
 		../../../../QtProgramFiles/6.4.0/mingw_64/lib/Qt6EntryPoint.prl \
-		.qmake.stash \
-		../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/build_pass.prf
+		../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/build_pass.prf \
+		../Snake-Game/resources.qrc
 	$(QMAKE) -o Makefile ..\Snake-Game\Snake-Game.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 ../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/spec_pre.prf:
 ../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/device_config.prf:
@@ -338,6 +339,7 @@ Makefile: ../Snake-Game/Snake-Game.pro ../../../../QtProgramFiles/6.4.0/mingw_64
 ../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/qt_config.prf:
 ../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/win32-g++/qmake.conf:
 ../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/exclusive_builds.prf:
 ../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/toolchain.prf:
 ../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/default_pre.prf:
@@ -367,8 +369,8 @@ Makefile: ../Snake-Game/Snake-Game.pro ../../../../QtProgramFiles/6.4.0/mingw_64
 ../../../../QtProgramFiles/6.4.0/mingw_64/lib/Qt6Gui.prl:
 ../../../../QtProgramFiles/6.4.0/mingw_64/lib/Qt6Core.prl:
 ../../../../QtProgramFiles/6.4.0/mingw_64/lib/Qt6EntryPoint.prl:
-.qmake.stash:
 ../../../../QtProgramFiles/6.4.0/mingw_64/mkspecs/features/build_pass.prf:
+../Snake-Game/resources.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\Snake-Game\Snake-Game.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 

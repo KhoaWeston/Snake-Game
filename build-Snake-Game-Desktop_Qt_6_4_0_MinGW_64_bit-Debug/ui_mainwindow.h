@@ -11,6 +11,8 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QLCDNumber>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
@@ -22,6 +24,9 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
+    QLCDNumber *lcdNumber;
+    QLCDNumber *lcdNumber_2;
+    QLabel *label;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -32,9 +37,22 @@ public:
         MainWindow->resize(800, 600);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
+        lcdNumber = new QLCDNumber(centralwidget);
+        lcdNumber->setObjectName("lcdNumber");
+        lcdNumber->setGeometry(QRect(20, 20, 64, 23));
+        lcdNumber->setStyleSheet(QString::fromUtf8("background-color: transparent;"));
+        lcdNumber_2 = new QLCDNumber(centralwidget);
+        lcdNumber_2->setObjectName("lcdNumber_2");
+        lcdNumber_2->setGeometry(QRect(680, 20, 64, 23));
+        lcdNumber_2->setStyleSheet(QString::fromUtf8("background-color: transparent;"));
+        label = new QLabel(centralwidget);
+        label->setObjectName("label");
+        label->setGeometry(QRect(600, 20, 91, 20));
+        label->setStyleSheet(QString::fromUtf8("color: white;"));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
+        menubar->setGeometry(QRect(0, 0, 800, 25));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -48,6 +66,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Highscore:", nullptr));
     } // retranslateUi
 
 };
