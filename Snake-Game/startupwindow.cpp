@@ -36,7 +36,7 @@ StartupWindow::StartupWindow(QWidget *parent) :
     int size_button_sg_H = 320, size_button_sg_V = 50;
     int size_label_Hline_H = 450;
     int size_label_pic_H = 512, size_label_pic_V = 512;
-    int size_mainWindow_H = 532, size_mainWindow_V = 922;
+    int size_mainWindow_H = 532, size_mainWindow_V = 922; // 532, 922
 
 //Snake big name label
     bigName_label = new QLabel("~SNAKE~", this);
@@ -200,32 +200,29 @@ StartupWindow::StartupWindow(QWidget *parent) :
 
 void StartupWindow::on_difficulty_slug_clicked()
 {
-//    t_interval = VALUE;
+//    t_interval = SLUG;
     difficulty_slug->setStyleSheet("background-color: rgb(100, 100, 100);"
                                    "border:6px solid rgb(50, 50, 50);");
     difficulty_worm->setStyleSheet("background-color: rgb(100, 100, 100);");
     difficulty_python->setStyleSheet("background-color: rgb(100, 100, 100);");
-    qInfo() << "slug";
 }
 
 void StartupWindow::on_difficulty_worm_clicked()
 {
-//    t_interval = VALUE;
+    // t_interval = WORM;
     difficulty_worm->setStyleSheet("background-color: rgb(100, 100, 100);"
                                    "border:6px solid rgb(50, 50, 50);");
     difficulty_slug->setStyleSheet("background-color: rgb(100, 100, 100);");
     difficulty_python->setStyleSheet("background-color: rgb(100, 100, 100);");
-    qInfo() << "worm";
 }
 
 void StartupWindow::on_difficulty_python_clicked()
 {
-//    t_interval = VALUE;
+//    t_interval = PYTHON;
     difficulty_python->setStyleSheet("background-color: rgb(100, 100, 100);"
                                    "border:6px solid rgb(50, 50, 50);");
     difficulty_slug->setStyleSheet("background-color: rgb(100, 100, 100);");
     difficulty_worm->setStyleSheet("background-color: rgb(100, 100, 100);");
-    qInfo() << "python";
 }
 
 void StartupWindow::on_one_player_clicked()
@@ -234,7 +231,6 @@ void StartupWindow::on_one_player_clicked()
     one_player->setStyleSheet("background-color: rgb(100, 100, 100);"
                               "border:6px solid rgb(50, 50, 50);");
     two_player->setStyleSheet("background-color: rgb(100, 100, 100);");
-    qInfo() << "one player";
 }
 
 void StartupWindow::on_two_player_clicked()
@@ -243,7 +239,6 @@ void StartupWindow::on_two_player_clicked()
     two_player->setStyleSheet("background-color: rgb(100, 100, 100);"
                               "border:6px solid rgb(50, 50, 50);");
     one_player->setStyleSheet("background-color: rgb(100, 100, 100);");
-    qInfo() << "two player";
 }
 
 void StartupWindow::on_start_game_clicked()

@@ -7,17 +7,12 @@ GameWindow::GameWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-//    int num_fruit = 1;
-//    enum fruit_type{APPLE, EGGPLANT, PEACH};
-//    enum snake_color{BLUE, RED, YELLOW, ORANGE, GREEN, PURPLE};
-//    enum background_color{SUMMER, NIGHT, WINTER, FALL, SPRING};
-
-// Set Game Variables
+    // Set Game Variables
     multi_player = false;
     enum board_sizes{SMALL=50, MEDIUM=25, LARGE=20};
     tile_size = MEDIUM;
-    enum snake_speed{SLUG=200, WORM=100, PYTHON=50};
-    t_interval = 30; // milliseconds
+    enum snake_speed{SLUG=40, WORM=20, PYTHON=10}; // milliseconds
+    t_interval = WORM;
 
     // TODO: implement the following
 //    int num_fruit = 1;
@@ -65,19 +60,23 @@ GameWindow::GameWindow(QWidget *parent) :
 
     // Move timer for snake 1
     move_timer1 = new QTimer(this);
-    move_timer1->setInterval(150);
+    move_timer1->setInterval(7.5*(t_interval));
     connect(move_timer1,SIGNAL(timeout()), this, SLOT(stop1()));
 
     // Move timer for snake 2
     move_timer2 = new QTimer(this);
-    move_timer2->setInterval(150);
+    move_timer2->setInterval(7.5*(t_interval));
     connect(move_timer2,SIGNAL(timeout()), this, SLOT(stop2()));
 }
 
+// Destrutor
+GameWindow::~GameWindow(){
+    delete ui;
+}
+
+
 // Stops snake 1 move timer
-void GameWindow::stop1()
-{
-    // stop timer
+void GameWindow::stop1(){
     for(uint i = 1; i < list_dir1.size(); i++){
         list_dir1.pop_back();
     }
@@ -86,8 +85,7 @@ void GameWindow::stop1()
 
 
 // Stops snake 2 move timer
-void GameWindow::stop2()
-{
+void GameWindow::stop2(){
     for(uint i = 1; i < list_dir2.size(); i++){
         list_dir2.pop_back();
     }
@@ -207,18 +205,17 @@ void GameWindow::setDirection(bool &game_start, QTimer *move_timer, eDirections 
 // Game logic
 void GameWindow::logic(){
     // Bounces the apple every 0.5 seconds
-    if(bounce_ctr==5){
-       bounce = !bounce;
-       bounce_ctr=0;
-    }else{
-        bounce_ctr++;
-    }
+    (bounce_ctr==(500/t_interval))?(bounce_ctr=0,bounce = !bounce):bounce_ctr++;
 
     // Set the coordinates of each section of the body
     std::vector<int> snake1_prev_pos = snake1_body[0];
-    setCoordinate(snake1_prev_pos, snake1_body, snake1_posX, snake1_posY);
+    if(game_start1){
+        setCoordinate(snake1_prev_pos, snake1_body, snake1_posX, snake1_posY);
+    }
     std::vector<int> snake2_prev_pos = snake2_body[0];
-    setCoordinate(snake2_prev_pos, snake2_body, snake2_posX, snake2_posY);
+    if(game_start2){
+        setCoordinate(snake2_prev_pos, snake2_body, snake2_posX, snake2_posY);
+    }
 
     // Changes snake position according to user-specified direction
     switchDirection(list_dir1, snake1_posX, snake1_posY);
@@ -229,11 +226,10 @@ void GameWindow::logic(){
         // Checks if snake 1 head hits its tail
         for (uint i = 0; i < snake1_body.size(); i++){
             if (snake1_body[i][0] == snake1_posX && snake1_body[i][1] == snake1_posY){
-                game_start1=false;
                 if(!multi_player){
-                    gameOverMessage("You hit your tail! ");
+                    gameOverMessage("You hit your tail! ", game_start1);
                 }else{
-                    gameOverMessage("Snake 1 hit your tail. Snake 2 wins! ");
+                    gameOverMessage("Snake 1 hit your tail. Snake 2 wins! ", game_start1);
                 }
             }
 
@@ -246,9 +242,9 @@ void GameWindow::logic(){
         snake1_posY <= header_height)){                      // Ceiling
             game_start1=false;
             if(!multi_player){
-                gameOverMessage("You hit the wall! ");
+                gameOverMessage("You hit the wall! ", game_start1);
             }else{
-                gameOverMessage("Snake 1 hit the wall. Snake 2 wins! ");
+                gameOverMessage("Snake 1 hit the wall. Snake 2 wins! ", game_start1);
             }
 
         }
@@ -257,7 +253,7 @@ void GameWindow::logic(){
         if(multi_player){
             for (uint i = 0; i < snake2_body.size(); i++){
                 if (snake1_posX == snake2_body[i][0] && snake1_posY == snake2_body[i][1]){
-                    gameOverMessage("Snake 1 hit Snake 2. Snake 2 wins! ");
+                    gameOverMessage("Snake 1 hit Snake 2. Snake 2 wins! ", game_start1);
                 }
             }
         }
@@ -269,7 +265,7 @@ void GameWindow::logic(){
         // Checks if snake 2 head hits its tail
         for (uint i = 0; i < snake2_body.size(); i++){
             if (snake2_body[i][0] == snake2_posX && snake2_body[i][1] == snake2_posY){
-                gameOverMessage("Snake 2 hit your tail. Snake 1 wins! ");
+                gameOverMessage("Snake 2 hit your tail. Snake 1 wins! ", game_start2);
             }
         }
 
@@ -278,43 +274,20 @@ void GameWindow::logic(){
         snake2_posX <= 0) ||                                 // Left wall
         (snake2_posY >= tile_size*num_rows+header_height ||  // Floor
         snake2_posY <= header_height)){                      // Ceiling
-            gameOverMessage("Snake 2 hit the wall. Snake 1 wins! ");
+            gameOverMessage("Snake 2 hit the wall. Snake 1 wins! ", game_start2);
         }
 
         // Checks if snake 2 head hits snake 1 body
         for (uint i = 0; i < snake1_body.size(); i++){
             if (snake2_posX == snake1_body[i][0] && snake2_posY == snake1_body[i][1]){
-                gameOverMessage("Snake 2 hit Snake 1. Snake 1 wins! ");
+                gameOverMessage("Snake 2 hit Snake 1. Snake 1 wins! ", game_start2);
             }
         }
     }
 
-    bool col_flag;
     // Checks if snake 1 eats an apple
     if(snake1_body[0][0] == apple_posx && snake1_body[0][1] == apple_posy){
-        // Moves apple to random position not on snake body
-        do{
-            col_flag = false;
-            apple_posx = round((rand()%(tile_size*(num_cols-2))+tile_size)/float(tile_size))*tile_size;
-            apple_posy = round((rand()%(tile_size*(num_rows-2))+tile_size)/float(tile_size))*tile_size+header_height;
-            for(uint i = 0; i < snake1_body.size(); i++){
-                if(snake1_body[i][0] == apple_posx && snake1_body[i][1] == apple_posy){
-                    col_flag=true;
-                }
-            }
-            if(multi_player){
-                for(uint j = 0; j < snake2_body.size(); j++){
-                    if(snake2_body[j][0] == apple_posx && snake2_body[j][1] == apple_posy){
-                        col_flag=true;
-                    }
-                }
-            }
-        }while(col_flag);
-
-        // Adds a segment to the snake body
-        for(int i=0;i<5;i++){
-            snake1_body.push_back(snake1_prev_pos);
-        }
+        eatApple(snake1_body, snake1_prev_pos);
 
         // Changes score
         score1++;
@@ -329,25 +302,7 @@ void GameWindow::logic(){
 
     // Checks if snake 2 eats an apple
     if(multi_player && snake2_body[0][0] == apple_posx && snake2_body[0][1] == apple_posy){
-        // Moves apple to random position not on snake body
-        do{
-            col_flag = false;
-            apple_posx = round((rand()%(tile_size*(num_cols-2))+tile_size)/float(tile_size))*tile_size;
-            apple_posy = round((rand()%(tile_size*(num_rows-2))+tile_size)/float(tile_size))*tile_size+header_height;
-            for(uint i = 0; i < snake1_body.size(); i++){
-                if(snake1_body[i][0] == apple_posx && snake1_body[i][1] == apple_posy){
-                    col_flag=true;
-                }
-            }
-            for(uint j = 0; j < snake2_body.size(); j++){
-                if(snake2_body[j][0] == apple_posx && snake2_body[j][1] == apple_posy){
-                    col_flag=true;
-                }
-            }
-        }while(col_flag);
-
-        // Adds a segment to the snake body
-        snake2_body.push_back(snake2_prev_pos);
+        eatApple(snake2_body, snake2_prev_pos);
 
         // Changes score
         score2++;
@@ -357,7 +312,35 @@ void GameWindow::logic(){
     update();
 }
 
-void GameWindow::gameOverMessage(QString message){
+
+void GameWindow::eatApple(std::vector<std::vector<int>> &body, std::vector<int> prev_pos){
+    bool collision_flag;
+    // Moves apple to random position not on snake body
+    do{
+        collision_flag = false;
+        apple_posx = round((rand()%(tile_size*(num_cols-2))+tile_size)/float(tile_size))*tile_size;
+        apple_posy = round((rand()%(tile_size*(num_rows-2))+tile_size)/float(tile_size))*tile_size+header_height;
+        for(uint i = 0; i < snake1_body.size(); i++){
+            if(snake1_body[i][0] == apple_posx && snake1_body[i][1] == apple_posy){
+                collision_flag=true;
+            }
+        }
+        for(uint j = 0; j < snake2_body.size(); j++){
+            if(snake2_body[j][0] == apple_posx && snake2_body[j][1] == apple_posy){
+                collision_flag=true;
+            }
+        }
+    }while(collision_flag);
+
+    // Adds 5 segments to the snake body
+    for(int i=0;i<5;i++){
+        body.push_back(prev_pos);
+    }
+}
+
+
+void GameWindow::gameOverMessage(QString message, bool &game_start){
+    game_start = false;
     QMessageBox msgbox(QMessageBox::NoIcon, "Game Over", message + "Do you want to play again? ");
     msgbox.setStandardButtons(QMessageBox::Yes);
     msgbox.addButton(QMessageBox::No);
@@ -381,38 +364,41 @@ void GameWindow::setCoordinate(std::vector<int> &prev_pos, std::vector<std::vect
 }
 
 
-void GameWindow::setPosition(std::vector<eDirections> &list_dir){
-    if(list_dir.size()>1){
+void GameWindow::setPosition(std::vector<eDirections> &list_dir, bool turn_good){
+    if(turn_good && list_dir.size()>1){
         list_dir.erase(list_dir.begin());
     }
 }
 
 
 void GameWindow::switchDirection(std::vector<eDirections> &list_dir, int &snake_posX, int &snake_posY){
-    eDirections dir=list_dir[0];
-    bool blah=false;
+    eDirections current_dir=list_dir[0];
+    bool turn_good=false;
+
     if(list_dir.size()>1){
         switch (list_dir[1]){
             case LEFT:
-                if((snake_posY+header_height)%tile_size == 0){
-                    dir=list_dir[1];
-                    blah = true;
+                if((snake_posY-header_height)%tile_size == 0){
+                    current_dir=list_dir[1];
+                    turn_good = true;
                 }
                 break;
             case RIGHT:
-                if((snake_posY+header_height)%tile_size == 0){
-                    dir=list_dir[1];
-                    blah = true;
+                if((snake_posY-header_height)%tile_size == 0){
+                    current_dir=list_dir[1];
+                    turn_good = true;
                 }
                 break;
             case UP:
                 if(snake_posX%tile_size == 0){
-                    dir=list_dir[1];blah = true;
+                    current_dir=list_dir[1];
+                    turn_good = true;
                 }
                 break;
             case DOWN:
                 if(snake_posX%tile_size == 0){
-                    dir=list_dir[1];blah = true;
+                    current_dir=list_dir[1];
+                    turn_good = true;
                 }
                 break;
             case START:
@@ -424,23 +410,21 @@ void GameWindow::switchDirection(std::vector<eDirections> &list_dir, int &snake_
     switch (dir){
         case LEFT:
             snake_posX -= 5;
-            if(blah){setPosition(list_dir);}
             break;
         case RIGHT:
-            snake_posX += 5;
-            if(blah){setPosition(list_dir);}
+            snake_posX += tile_size/5;
+            setPosition(list_dir, turn_good);
             break;
         case UP:
-            snake_posY -= 5;
-            if(blah){setPosition(list_dir);}
+            snake_posY -= tile_size/5;
+            setPosition(list_dir, turn_good);
             break;
         case DOWN:
-            snake_posY += 5;
-            if(blah){setPosition(list_dir);}
+            snake_posY += tile_size/5;
+            setPosition(list_dir, turn_good);
             break;
         case START:
             // At start, snake doesn't move until button is pressed
-            break;
     }
 }
 
@@ -474,10 +458,4 @@ void GameWindow::reset(){
     list_dir1={START};
     list_dir2={START};
     update();
-}
-
-// Destrutor
-GameWindow::~GameWindow()
-{
-    delete ui;
 }

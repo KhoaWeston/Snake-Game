@@ -34,11 +34,12 @@ enum eDirections{
     virtual void paintEvent(QPaintEvent *event);
     void eat(int, int);
     void reset();
-    void gameOverMessage(QString);
+    void gameOverMessage(QString, bool&);
     void setDirection(bool&, QTimer*, eDirections, eDirections, std::vector<eDirections>&);
     void setCoordinate(std::vector<int>&, std::vector<std::vector<int>>&, int, int );
-    void setPosition(std::vector<eDirections>&);
+    void setPosition(std::vector<eDirections>&, bool);
     void switchDirection(std::vector<eDirections>&, int&, int&);
+    void eatApple(std::vector<std::vector<int>>&, std::vector<int>);
 
     // Game variables
     std::vector<eDirections> list_dir1;
@@ -68,7 +69,6 @@ enum eDirections{
     bool bounce;
     int bounce_ctr;
 
-    QWidget *start_up_w = new QWidget;
 
 public slots:
     void logic();
